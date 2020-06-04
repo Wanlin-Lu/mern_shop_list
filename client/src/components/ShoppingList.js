@@ -10,24 +10,21 @@ import { connect } from 'react-redux'
 import { getItems, deleteItem } from '../actions/itemActions'
 import PropTypes from 'prop-types'
 
-const ShoppingList = props => {
+const ShoppingList = ({ items, getItems, deleteItem }) => {
 
   useEffect(() => {
-    const _getItems = () => {
-      props.getItems();
-    }
-    _getItems()
-  }, [props])
+      getItems();
+  }, [getItems])
 
   const handleDelete = id => {
-    props.deleteItem(id)
+    deleteItem(id)
   }
 
   return (
     <Container>
       <ListGroup>
         <TransitionGroup className="shopping-list">
-          {props.items.map(({ _id, name }) => (
+          {items.map(({ _id, name }) => (
             <CSSTransition key={_id} timeout={500} classNames="fade">
               <ListGroupItem>
                 <Button
