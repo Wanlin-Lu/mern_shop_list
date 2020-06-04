@@ -25,7 +25,7 @@ const AppNavbar = () => {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="http://github.com/Wanlin-Lu">
+                <NavLink href="https://github.com/Wanlin-Lu/mern_shop_list">
                   Github
                 </NavLink>
               </NavItem>
@@ -34,7 +34,7 @@ const AppNavbar = () => {
         </Container>
       </Navbar>
     </div>
-  )
+  );
 }
 
 export default AppNavbar

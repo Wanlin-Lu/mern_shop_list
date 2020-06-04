@@ -50,7 +50,7 @@ const ShoppingList = props => {
 
 ShoppingList.propTypes = {
   getItems: PropTypes.func.isRequired,
-  item: PropTypes.object.isRequired
+  items: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => {
