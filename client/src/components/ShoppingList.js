@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { getItems, deleteItem } from '../actions/itemActions'
 import PropTypes from 'prop-types'
 
-const ShoppingList = ({ items, getItems, deleteItem }) => {
+const ShoppingList = ({ items, getItems, deleteItem, isAuthenticated }) => {
 
   useEffect(() => {
       getItems();
@@ -51,7 +51,10 @@ ShoppingList.propTypes = {
 }
 
 const mapStateToProps = state => {
-  return { items: state.item.items };
+  return {
+    items: state.item.items,
+    isAuthenticated: state.auth.isAuthenticated
+  }
 }
 
 export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList)

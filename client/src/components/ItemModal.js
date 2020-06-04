@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux'
 import { addItem } from '../actions/itemActions'
 
-const ItemModal = props => {
+const ItemModal = ({ isAuthenticated, addItem }) => {
   const [inputName, setInputName] = useState('')
   const [isOpen, setModalOpen] = useState(false)
 
@@ -26,16 +26,17 @@ const ItemModal = props => {
 
   const submitHandler = e => {
     e.preventDefault()
-    props.addItem({ name: inputName })
+    addItem({ name: inputName })
     setModalOpen(false)
   }
 
   return (
     <div>
-      <Button color="dark" style={{ marginBottom: '2rem' }} onClick={toggle}>
+      {isAuthenticated ? (<Button color="dark" style={{ marginBottom: '2rem' }} onClick={toggle}>
         Add Item
-      </Button>
-
+      </Button>) : (
+          <h4 className="mb-3 ml-4">Please log in to manage items</h4>
+        )}
       <Modal isOpen={isOpen} toggle={toggle}>
         <ModalHeader toggle={toggle}>Add to Shopping List</ModalHeader>
         <ModalBody>
@@ -61,7 +62,8 @@ const ItemModal = props => {
 }
 
 const mapStateToProps = state => ({
-  item: state.item
+  item: state.item,
+  isAuthenticated: state.auth.isAuthenticated
 })
 
 export default connect(mapStateToProps, { addItem })(ItemModal)
