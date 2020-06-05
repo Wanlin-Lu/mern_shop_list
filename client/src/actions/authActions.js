@@ -31,8 +31,9 @@ export const loadUser = () => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      err.text().then((errorMessage) => {
-        dispatch(returnErrors(errorMessage.data, errorMessage.status));
+      const status = err.status
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
         dispatch({ type: AUTH_ERROR })
       });
     });
@@ -43,7 +44,7 @@ export const register = ({ name, email, password }) => dispatch => {
       'Content-Type': 'application/json'
   }
   const body = JSON.stringify({ name, email, password })
-  fetch("/api/users", {
+  fetch("/api/auth/register", {
     method: "POST",
     body: body,
     headers: config,
@@ -61,15 +62,16 @@ export const register = ({ name, email, password }) => dispatch => {
       });
     })
     .catch((err) => {
-      err.text().then((errorMessage) => {
-        dispatch(returnErrors(errorMessage.data, errorMessage.status));
-        dispatch({ type: REGISTER_FAIL })
+      const status = err.status;
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
+        dispatch({ type: REGISTER_FAIL });
       });
     });
 }
 
 export const login = ({ email, password }) => dispatch => {
-  fetch("/api/auth", {
+  fetch("/api/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -89,8 +91,9 @@ export const login = ({ email, password }) => dispatch => {
       });
     })
     .catch((err) => {
-      err.text().then((errorMessage) => {
-        dispatch(returnErrors(errorMessage.data, errorMessage.status));
+      const status = err.status;
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
         dispatch({ type: LOGIN_FAIL });
       });
     });

@@ -5,22 +5,24 @@ import { returnErrors } from './errorActions'
 export const getItems = () => dispatch => {
   dispatch(setItemsLoading());
   fetch("/api/items")
-    .then(res => {
+    .then((res) => {
       if (!res.ok) {
         throw res;
       }
-      return res.json()
+      return res.json();
     })
     .then((data) => {
       dispatch({
         type: GET_ITEMS,
         payload: data,
       });
-    }).catch(err => {
-      err.text().then(errorMessage => {
-        dispatch(returnErrors(errorMessage.data, errorMessage.status))
-      })
     })
+    .catch((err) => {
+      const status = err.status;
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
+      });
+    });
 };
 
 export const addItem = item => (dispatch, getState) => {
@@ -41,8 +43,11 @@ export const addItem = item => (dispatch, getState) => {
         payload: data,
       });
     })
-    .catch((errorMessage) => {
-      dispatch(returnErrors(errorMessage.data, errorMessage.status));
+    .catch((err) => {
+      const status = err.status;
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
+      });
     });
 }
 
@@ -64,8 +69,9 @@ export const deleteItem = id => (dispatch, getState) => {
       });
     })
     .catch((err) => {
-      err.text().then((errorMessage) => {
-        dispatch(returnErrors(errorMessage.data, errorMessage.status));
+      const status = err.status;
+      err.json().then((errorMessage) => {
+        dispatch(returnErrors(errorMessage.msg, status));
       });
     });
 }
