@@ -1,5 +1,7 @@
-const config = require('config')
+const config = require('../config')
 const jwt = require('jsonwebtoken')
+
+const { JWT_SECRET } = config
 
 const auth = (req, res, next) => {
   const token = req.header('x-auth-token')
@@ -9,7 +11,7 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, config.get('jwtSecret'))
+    const decoded = jwt.verify(token, JWT_SECRET)
     req.user = decoded;
     next()
   } catch (err) {

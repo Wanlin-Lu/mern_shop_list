@@ -6,10 +6,15 @@ const Item = require('../../models/Item')
 
 router.get(
   '/',
-  (req, res) => {
-    Item.find()
-      .sort({ date: -1 })
-      .then((items) => res.json(items));
+  async (req, res) => {
+    try {
+      const items = await Item.find().sort({ date: -1 });
+      if (!items) throw Error('No items.')
+
+      res.status(200).json(items)
+    } catch (e) {
+      res.status(400).json({ msg: e.message })
+    }
   })
 
 router.post(
@@ -32,10 +37,18 @@ router.post(
 router.delete(
   '/:id',
   auth,
-  (req, res) => {
-    Item.findById(req.params.id)
-      .then(item => item.remove().then(() => res.json({ success: true })))
-      .catch(err => res.status(404).json({ success: false }))
+  async (req, res) => {
+    try {
+      const item = await Item.findById(req.params.id)
+      if (!item) throw Error('Not item found.')
+
+      const removed = await item.remove()
+      if (!removed) throw Error('Fail to remove.')
+
+      res.status(200).json({ success: true })
+    } catch (e) {
+      res.status(400).json({ msg: e.message, success: false })
+    }
   }
 )
 
